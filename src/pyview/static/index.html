@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PyView App</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/_pyview/static/style.css" />
+</head>
+<body>
+  <div class="pv-layout">
+    <!-- Navigation / Status Bar -->
+    <header class="pv-header">
+      <div class="pv-brand">
+        <button id="btn-toggle-sidebar" class="pv-sidebar-toggle-btn" title="Toggle Sidebar" style="display: none;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+        </button>
+        <div class="pv-logo-badge">PV</div>
+        <span class="pv-brand-name">PyView</span>
+      </div>
+      <div class="pv-status-bar">
+        <div id="status-running" class="pv-running-badge" style="display: none;">
+          <span class="pv-spinner"></span>
+          <span>Running...</span>
+        </div>
+        <div id="status-connection" class="pv-conn-badge pv-conn-connecting">
+          <span class="pv-dot"></span>
+          <span id="status-text">Connecting...</span>
+        </div>
+        <button id="btn-rerun" class="pv-action-btn" title="Rerun app (Ctrl+R / Cmd+R)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+          </svg>
+          <span>Rerun</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Error Banner / Traceback Modal -->
+    <div id="error-container" class="pv-error-container" style="display: none;">
+      <div class="pv-error-card">
+        <div class="pv-error-header">
+          <div class="pv-error-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="8" x2="12" y2="12"/>
+              <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            <span>Script Execution Error</span>
+          </div>
+          <button id="btn-dismiss-error" class="pv-icon-btn">&times;</button>
+        </div>
+        <pre id="error-traceback" class="pv-traceback"></pre>
+      </div>
+    </div>
+
+    <!-- App Body with Sidebar + Main Content -->
+    <div class="pv-body-container">
+      <!-- Optional Sidebar Container -->
+      <aside id="sidebar-root" class="pv-sidebar" style="display: none;">
+        <div class="pv-sidebar-content">
+          <!-- Sidebar elements rendered here -->
+        </div>
+      </aside>
+
+      <!-- Main Content Canvas -->
+      <main class="pv-main-content">
+        <div id="app-root" class="pv-elements-tree">
+          <div class="pv-skeleton-loading">
+            <div class="pv-skeleton pv-skeleton-title"></div>
+            <div class="pv-skeleton pv-skeleton-text"></div>
+            <div class="pv-skeleton pv-skeleton-input"></div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="/_pyview/static/app.js"></script>
+</body>
+</html>
