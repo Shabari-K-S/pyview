@@ -93,6 +93,16 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
 }
 
 html {
@@ -331,15 +341,6 @@ code:not(pre code) {
   padding: 2rem 1.25rem 3rem 1.5rem;
   border-right: 1px solid var(--border-subtle);
   background: var(--bg-primary);
-  scrollbar-width: thin;
-}
-
-.docs-sidebar::-webkit-scrollbar {
-  width: 4px;
-}
-
-.docs-sidebar::-webkit-scrollbar-thumb {
-  background: var(--border-subtle);
 }
 
 .sidebar-section {
@@ -416,15 +417,6 @@ code:not(pre code) {
   padding: 2rem 1.5rem 3rem 1.5rem;
   border-left: 1px solid var(--border-subtle);
   background: var(--bg-primary);
-  scrollbar-width: thin;
-}
-
-.docs-toc::-webkit-scrollbar {
-  width: 4px;
-}
-
-.docs-toc::-webkit-scrollbar-thumb {
-  background: var(--border-subtle);
 }
 
 .toc-heading {
