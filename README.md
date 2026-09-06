@@ -39,10 +39,29 @@ Open `http://127.0.0.1:8501` in your browser.
 
 ---
 
+## 📚 Documentation & Interactive Explorer
+
+PyView includes a complete documentation portal with dark/light themes, instant search, copyable snippets, and interactive widget demos:
+
+1. **Serve Local Documentation Portal**:
+   ```bash
+   uv run pyview docs --port 8000
+   ```
+   *Opens the documentation portal at `http://127.0.0.1:8000` (ready for GitHub Pages or static web servers).*
+
+2. **Interactive Living Documentation App**:
+   ```bash
+   uv run pyview run examples/documentation_showcase.py --port 8501
+   ```
+   *Runs a full PyView application that documents PyView using live PyView widgets.*
+
+---
+
 ## Included Examples
 
 | Script | Description |
 | :--- | :--- |
+| [`examples/documentation_showcase.py`](examples/documentation_showcase.py) | **Living Documentation Explorer**: Interactive showcase of all PyView components, layout containers, forms, and caching mechanics. |
 | [`examples/data_showcase.py`](examples/data_showcase.py) | **Data Elements Showcase**: Interactive dataframes with sorting/search/progress bars, dynamic live order batch data editor, static shipping table, and collapsible JSON telemetry. |
 | [`examples/layout_showcase.py`](examples/layout_showcase.py) | **Layout Containers Showcase**: Sidebar, multi-column metric grids, multi-tab workload forecasting, and diagnostics expanders. |
 | [`examples/dashboard.py`](examples/dashboard.py) | **Executive Dashboard**: KPI metrics with normal & inverse deltas, sliders, selectboxes, checkboxes, text areas, and status alerts. |

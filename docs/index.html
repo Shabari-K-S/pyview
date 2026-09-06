@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PyView Documentation — Pure-Python Reactive Web Framework</title>
+  <meta name="description" content="Official documentation for PyView, a lightweight, pure-Python reactive web framework built with zero Streamlit dependencies, async WebSockets, and pure client-side reactivity." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ========================================================================
+       Navigation Header
+       ======================================================================== -->
+  <header class="docs-header">
+    <div class="header-left">
+      <button id="mobile-nav-toggle" class="mobile-nav-toggle" aria-label="Toggle Navigation Menu">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+
+      <a href="#hero" class="brand-container">
+        <div class="brand-logo-badge">PV</div>
+        <span class="brand-text">PyView</span>
+        <span class="brand-version">v0.1.0</span>
+      </a>
+
+      <nav class="header-nav">
+        <a href="#quickstart" class="header-nav-link">Get Started</a>
+        <a href="#architecture" class="header-nav-link">Architecture</a>
+        <a href="#api-reference" class="header-nav-link">API Reference</a>
+        <a href="#examples-gallery" class="header-nav-link">Examples</a>
+      </nav>
+    </div>
+
+    <div class="header-right">
+      <div class="search-wrapper">
+        <span class="search-icon">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </span>
+        <input type="text" id="global-search" class="search-input" placeholder="Search docs..." aria-label="Search documentation" />
+        <span class="search-kbd">/</span>
+      </div>
+
+      <button id="theme-toggle-btn" class="icon-btn" title="Toggle Dark/Light Mode" aria-label="Toggle Theme">
+        <span id="theme-icon">🌙</span>
+      </button>
+
+      <a href="https://github.com/Shabari-K-S/pyview" target="_blank" rel="noopener noreferrer" class="icon-btn" title="GitHub Repository">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"></path>
+        </svg>
+      </a>
+    </div>
+  </header>
+
+  <!-- ========================================================================
+       Documentation Shell
+       ======================================================================== -->
+  <div class="docs-container">
+
+    <!-- Sidebar Navigation -->
+    <aside id="docs-sidebar" class="docs-sidebar">
+      <div class="sidebar-section">
+        <h4 class="sidebar-heading">Overview</h4>
+        <ul class="sidebar-menu">
+          <li><a href="#hero" class="sidebar-link active">Introduction</a></li>
+          <li><a href="#quickstart" class="sidebar-link">Quick Start</a></li>
+          <li><a href="#cli" class="sidebar-link">CLI Commands</a></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <h4 class="sidebar-heading">Core Architecture</h4>
+        <ul class="sidebar-menu">
+          <li><a href="#rerun-model" class="sidebar-link">Rerun Lifecycle</a></li>
+          <li><a href="#state-session" class="sidebar-link">Session State</a></li>
+          <li><a href="#container-scoping" class="sidebar-link">Container Scoping</a></li>
+          <li><a href="#caching" class="sidebar-link">Caching Engine</a></li>
+          <li><a href="#flow-control" class="sidebar-link">Flow Control</a></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <h4 class="sidebar-heading">Layout & Containers</h4>
+        <ul class="sidebar-menu">
+          <li><a href="#api-columns" class="sidebar-link">pv.columns</a></li>
+          <li><a href="#api-tabs" class="sidebar-link">pv.tabs</a></li>
+          <li><a href="#api-card" class="sidebar-link">pv.card & container</a></li>
+          <li><a href="#api-expander" class="sidebar-link">pv.expander</a></li>
+          <li><a href="#api-sidebar" class="sidebar-link">pv.sidebar</a></li>
+          <li><a href="#api-form" class="sidebar-link">pv.form</a></li>
+          <li><a href="#api-status-container" class="sidebar-link">pv.status & skeleton</a></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <h4 class="sidebar-heading">Value & Form Controls</h4>
+        <ul class="sidebar-menu">
+          <li><a href="#api-buttons" class="sidebar-link">Buttons & Links</a></li>
+          <li><a href="#api-text-inputs" class="sidebar-link">Text & Area</a></li>
+          <li><a href="#api-numeric" class="sidebar-link">Sliders & Numbers</a></li>
+          <li><a href="#api-selectors" class="sidebar-link">Select & Pills</a></li>
+          <li><a href="#api-boolean" class="sidebar-link">Checkbox & Toggle</a></li>
+          <li><a href="#api-media-inputs" class="sidebar-link">File Upload & Color</a></li>
+          <li><a href="#api-temporal" class="sidebar-link">Date & Time</a></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <h4 class="sidebar-heading">Tabular Data & Grid</h4>
+        <ul class="sidebar-menu">
+          <li><a href="#api-dataframe" class="sidebar-link">pv.dataframe</a></li>
+          <li><a href="#api-data-editor" class="sidebar-link">pv.data_editor <span class="sidebar-badge sidebar-badge-new">NEW</span></a></li>
+          <li><a href="#api-column-config" class="sidebar-link">Column Config</a></li>
+          <li><a href="#api-json" class="sidebar-link">pv.json</a></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <h4 class="sidebar-heading">Media & Status</h4>
+        <ul class="sidebar-menu">
+          <li><a href="#api-media" class="sidebar-link">Media (Img, Audio, Video)</a></li>
+          <li><a href="#api-metrics" class="sidebar-link">KPI Metrics</a></li>
+          <li><a href="#api-feedback" class="sidebar-link">Progress & Toasts</a></li>
+          <li><a href="#api-celebrations" class="sidebar-link">Balloons & Snow</a></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <h4 class="sidebar-heading">Examples</h4>
+        <ul class="sidebar-menu">
+          <li><a href="#examples-gallery" class="sidebar-link">12 Ready-to-Run Apps</a></li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Main Content Stream -->
+    <main class="docs-content">
+
+      <!-- ====================================================================
+           Hero Section
+           ==================================================================== -->
+      <section id="hero" class="hero-section">
+        <div class="hero-badge-container">
+          <span>🚀 Zero-Streamlit Pure Python Reactive Framework</span>
+        </div>
+        <h1 class="hero-title">
+          Build Reactive Web Apps with Pure Simplicity
+        </h1>
+        <p class="hero-subtitle">
+          PyView executes standard Python scripts top-to-bottom on every user interaction. Built from scratch with an async FastAPI + WebSocket engine, container-scoped identity, dynamic data grids, and instant client-side tabs without complex frontend builds.
+        </p>
+
+        <!-- Install Box -->
+        <div class="hero-install-card">
+          <div class="install-tabs">
+            <button class="install-tab-btn active" data-pm="uv">uv</button>
+            <button class="install-tab-btn" data-pm="pip">pip</button>
+            <button class="install-tab-btn" data-pm="git">git clone</button>
+          </div>
+          <div class="install-command-box">
+            <span id="install-command" class="install-command-text">uv add pyview</span>
+            <button class="copy-btn" data-target="#install-command">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              <span>Copy</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="hero-actions">
+          <a href="#quickstart" class="btn-primary">
+            <span>Get Started in 60s</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+          <a href="#api-reference" class="btn-secondary">
+            <span>Browse Full API Reference</span>
+          </a>
+        </div>
+
+        <!-- Key Feature Highlights -->
+        <div class="feature-grid">
+          <div class="feature-card">
+            <div class="feature-icon-wrapper">🔄</div>
+            <h3 class="feature-title">Top-to-Bottom Rerun</h3>
+            <p class="feature-desc">Write plain procedural Python. Every user input simply reruns your script top-to-bottom with new values instantly reflected in the DOM.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon-wrapper">📦</div>
+            <h3 class="feature-title">Container Scoping</h3>
+            <p class="feature-desc">Un-keyed widgets inside nested columns, tabs, or expanders derive isolated container paths like <code>columns_0.col_1.btn_2</code> to prevent collisions.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon-wrapper">⚡</div>
+            <h3 class="feature-title">Async & Non-Blocking</h3>
+            <p class="feature-desc">FastAPI + WebSockets stream JSON element trees. User scripts run in dedicated background worker threads without stalling event loops.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon-wrapper">📊</div>
+            <h3 class="feature-title">Data Grid & Editor</h3>
+            <p class="feature-desc">Interactive dataframes with sort, search, pagination, and reactive editable grids with custom column types (progress, links, tags).</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon-wrapper">🧠</div>
+            <h3 class="feature-title">Intelligent Caching</h3>
+            <p class="feature-desc">Memoize expensive computation with <code>@pv.cache_data(ttl=...)</code> and retain global connection singletons with <code>@pv.cache_resource</code>.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon-wrapper">🎨</div>
+            <h3 class="feature-title">Zero Frontend Build</h3>
+            <p class="feature-desc">Pure vanilla modern CSS and JS. No node, no webpack, no npm. Instant hot reload and beautiful out-of-the-box styling.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           Interactive Playground Preview
+           ==================================================================== -->
+      <section class="doc-section">
+        <div class="section-tag">Interactive Preview</div>
+        <h2 class="section-heading">How PyView Works in Practice</h2>
+        <p class="section-lead">Here is a complete PyView reactive app on the left, paired with an interactive live simulation on the right. Try clicking the buttons and moving the slider!</p>
+
+        <div class="interactive-demo-card">
+          <!-- Python Code View -->
+          <div class="demo-pane-code">
+            <div class="code-header">
+              <div class="code-filename">
+                <div class="code-dots">
+                  <div class="code-dot"></div>
+                  <div class="code-dot"></div>
+                  <div class="code-dot"></div>
+                </div>
+                <span>app.py</span>
+              </div>
+              <button class="copy-btn">
+                <span>Copy</span>
+              </button>
+            </div>
+            <pre class="code-block"><code><span class="token-kw">import</span> pyview <span class="token-kw">as</span> pv
+
+pv.<span class="token-fn">title</span>(<span class="token-str">"Live Analytics Hub"</span>)
+
+<span class="token-comment"># Interactive slider control</span>
+multiplier = pv.<span class="token-fn">slider</span>(<span class="token-str">"Scale Factor"</span>, min_value=<span class="token-num">1</span>, max_value=<span class="token-num">10</span>, value=<span class="token-num">2</span>)
+
+<span class="token-comment"># Two-column layout container</span>
+col1, col2 = pv.<span class="token-fn">columns</span>([<span class="token-num">1</span>, <span class="token-num">1</span>])
+
+<span class="token-kw">with</span> col1:
+    pv.<span class="token-fn">metric</span>(<span class="token-str">"Base Metric"</span>, pv.session_state.<span class="token-fn">get</span>(<span class="token-str">"count"</span>, <span class="token-num">42</span>))
+
+<span class="token-kw">with</span> col2:
+    scaled = pv.session_state.<span class="token-fn">get</span>(<span class="token-str">"count"</span>, <span class="token-num">42</span>) * multiplier
+    pv.<span class="token-fn">metric</span>(<span class="token-str">"Scaled Output"</span>, scaled, delta=f<span class="token-str">"x{multiplier}"</span>)
+
+<span class="token-kw">if</span> pv.<span class="token-fn">button</span>(<span class="token-str">"Increment Value 🚀"</span>):
+    pv.session_state[<span class="token-str">"count"</span>] = pv.session_state.<span class="token-fn">get</span>(<span class="token-str">"count"</span>, <span class="token-num">42</span>) + <span class="token-num">1</span>
+
+<span class="token-kw">if</span> pv.<span class="token-fn">button</span>(<span class="token-str">"Reset"</span>):
+    pv.session_state[<span class="token-str">"count"</span>] = <span class="token-num">0</span></code></pre>
+          </div>
+
+          <!-- Live Interactive Simulation -->
+          <div class="demo-pane-preview">
+            <div class="demo-preview-header">
+              <span>Interactive App Preview</span>
+              <div class="preview-status-indicator">
+                <span class="preview-status-dot"></span>
+                <span>Reactive Connected</span>
+              </div>
+            </div>
+
+            <div class="pv-mock-ui">
+              <h3 style="font-size: 1.4rem; font-weight: 700; color: var(--text-primary);">Live Analytics Hub</h3>
+
+              <div class="pv-mock-slider-group">
+                <label>
+                  <span>Scale Factor</span>
+                  <span id="demo-slider-val" style="font-family: var(--font-mono); color: #38bdf8;">2</span>
+                </label>
+                <input id="demo-slider" type="range" class="pv-mock-slider" min="1" max="10" value="2" />
+              </div>
+
+              <div class="pv-mock-metric-row">
+                <div class="pv-mock-metric">
+                  <div class="pv-mock-metric-label">Base Metric</div>
+                  <div id="demo-counter-val" class="pv-mock-metric-val">42</div>
+                  <div id="demo-counter-delta" class="pv-mock-metric-delta">Ready</div>
+                </div>
+                <div class="pv-mock-metric">
+                  <div class="pv-mock-metric-label">Scaled Output</div>
+                  <div id="demo-metric-multiplied" class="pv-mock-metric-val">84</div>
+                  <div class="pv-mock-metric-delta">Reactive calculation</div>
+                </div>
+              </div>
+
+              <div class="pv-mock-btn-group">
+                <button id="demo-btn-inc" class="pv-mock-btn">Increment Value 🚀</button>
+                <button id="demo-btn-reset" class="pv-mock-btn pv-mock-btn-secondary">Reset</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           Quick Start Guide
+           ==================================================================== -->
+      <section id="quickstart" class="doc-section">
+        <div class="section-tag">Getting Started</div>
+        <h2 class="section-heading">Quick Start Guide</h2>
+        <p class="section-lead">Get a fully reactive web application running locally in less than one minute.</p>
+
+        <h3 class="subsection-heading">1. Installation</h3>
+        <p>PyView requires Python 3.12 or 3.14+ and leverages modern type annotations.</p>
+
+        <div class="code-container">
+          <div class="code-header">
+            <span class="code-filename">Terminal</span>
+            <button class="copy-btn"><span>Copy</span></button>
+          </div>
+          <pre class="code-block"><code><span class="token-comment"># Using uv (recommended)</span>
+uv add pyview
+
+<span class="token-comment"># Or with standard pip</span>
+pip install pyview</code></pre>
+        </div>
+
+        <h3 class="subsection-heading">2. Write Your First App</h3>
+        <p>Create a file named <code>hello.py</code>:</p>
+
+        <div class="code-container">
+          <div class="code-header">
+            <span class="code-filename">hello.py</span>
+            <button class="copy-btn"><span>Copy</span></button>
+          </div>
+          <pre class="code-block"><code><span class="token-kw">import</span> pyview <span class="token-kw">as</span> pv
+
+pv.<span class="token-fn">title</span>(<span class="token-str">"Welcome to PyView 👋"</span>)
+pv.<span class="token-fn">write</span>(<span class="token-str">"Build interactive data apps without touching HTML, CSS, or JS."</span>)
+
+user_name = pv.<span class="token-fn">text_input</span>(<span class="token-str">"What is your name?"</span>, value=<span class="token-str">"Developer"</span>)
+language = pv.<span class="token-fn">selectbox</span>(<span class="token-str">"Favorite Language"</span>, [<span class="token-str">"Python"</span>, <span class="token-str">"Rust"</span>, <span class="token-str">"TypeScript"</span>, <span class="token-str">"Go"</span>])
+
+<span class="token-kw">if</span> pv.<span class="token-fn">button</span>(<span class="token-str">"Generate Welcome Greeting"</span>):
+    pv.<span class="token-fn">success</span>(f<span class="token-str">"Hello, {user_name}! We're thrilled you love {language}."</span>)
+    pv.<span class="token-fn">balloons</span>()</code></pre>
+        </div>
+
+        <h3 id="cli" class="subsection-heading">3. Launch the App via CLI</h3>
+        <p>Use the <code>pyview run</code> command to start the reactive server:</p>
+
+        <div class="code-container">
+          <div class="code-header">
+            <span class="code-filename">Terminal</span>
+            <button class="copy-btn"><span>Copy</span></button>
+          </div>
+          <pre class="code-block"><code>uv run pyview run hello.py --port 8501</code></pre>
+        </div>
+
+        <div class="callout callout-tip">
+          <div class="callout-icon">💡</div>
+          <div class="callout-content">
+            <strong>Hot Tip</strong>
+            Open <code>http://127.0.0.1:8501</code> in your browser. Any interaction instantly streams element diffs over WebSockets!
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           Architecture & Mental Model
+           ==================================================================== -->
+      <section id="architecture" class="doc-section">
+        <div class="section-tag">Architecture</div>
+        <h2 class="section-heading">Mental Model & Core Principles</h2>
+        <p class="section-lead">Understand the reactive lifecycle that makes PyView intuitive and predictable.</p>
+
+        <h3 id="rerun-model" class="subsection-heading">1. Top-to-Bottom Rerun</h3>
+        <p>
+          Unlike traditional event-driven frontend frameworks (which require callback graphs, signal wiring, and manual DOM listeners), PyView apps are pure scripts that execute <strong>top-to-bottom on every user interaction</strong>.
+        </p>
+
+        <div class="callout callout-info">
+          <div class="callout-icon">ℹ️</div>
+          <div class="callout-content">
+            <strong>How an Interaction Flows</strong>
+            <ol style="margin-left: 1.25rem; margin-top: 0.5rem;">
+              <li>User types into a text input or clicks a button in the browser.</li>
+              <li>The browser sends an asynchronous JSON message over WebSocket to FastAPI.</li>
+              <li>The <code>SessionManager</code> routes the event to the user's isolated <code>Session</code>.</li>
+              <li>A background worker thread re-runs the user's Python script from top to bottom with the updated widget values.</li>
+              <li>A lightweight JSON element tree is emitted and diffed onto the browser DOM.</li>
+            </ol>
+          </div>
+        </div>
+
+        <h3 id="state-session" class="subsection-heading">2. Session State Management</h3>
+        <p>
+          Values stored in standard local variables reset when a rerun occurs. To preserve user variables across multiple reruns, use <code>pv.session_state</code>:
+        </p>
+
+        <div class="code-container">
+          <div class="code-header">
+            <span class="code-filename">state_example.py</span>
+            <button class="copy-btn"><span>Copy</span></button>
+          </div>
+          <pre class="code-block"><code><span class="token-kw">import</span> pyview <span class="token-kw">as</span> pv
+
+<span class="token-comment"># Initialize default state</span>
+<span class="token-kw">if</span> <span class="token-str">"todos"</span> <span class="token-kw">not in</span> pv.session_state:
+    pv.session_state.todos = [<span class="token-str">"Review PR"</span>, <span class="token-str">"Deploy v0.1.0"</span>]
+
+new_item = pv.<span class="token-fn">text_input</span>(<span class="token-str">"New Todo"</span>)
+<span class="token-kw">if</span> pv.<span class="token-fn">button</span>(<span class="token-str">"Add Task"</span>) <span class="token-kw">and</span> new_item:
+    pv.session_state.todos.<span class="token-fn">append</span>(new_item)
+    pv.<span class="token-fn">rerun</span>()
+
+pv.<span class="token-fn">write</span>(pv.session_state.todos)</code></pre>
+        </div>
+
+        <h3 id="container-scoping" class="subsection-heading">3. Container-Scoped Identity</h3>
+        <p>
+          In traditional frameworks, placing two buttons with identical labels in different columns often causes identity collisions. PyView solves this with <strong>automatic hierarchical container scoping</strong>:
+        </p>
+        <p>
+          Every widget tracks its container hierarchy (e.g. <code>columns_0.col_1.btn_0</code>). You can safely place duplicate widgets inside nested layouts without passing manual <code>key="..."</code> parameters everywhere.
+        </p>
+
+        <h3 id="caching" class="subsection-heading">4. High-Performance Caching</h3>
+        <p>PyView provides two specialized caching decorators to prevent re-computing expensive operations:</p>
+
+        <div class="code-container">
+          <div class="code-header">
+            <span class="code-filename">caching_example.py</span>
+            <button class="copy-btn"><span>Copy</span></button>
+          </div>
+          <pre class="code-block"><code><span class="token-kw">import</span> pyview <span class="token-kw">as</span> pv
+
+<span class="token-comment"># 1. @pv.cache_data: For serializable computation, dataframes, and API calls</span>
+<span class="token-dec">@pv.cache_data</span>(ttl=<span class="token-num">300</span>)
+<span class="token-kw">def</span> <span class="token-fn">fetch_financial_records</span>(ticker: <span class="token-kw">str</span>):
+    <span class="token-comment"># Expensive database or remote fetch</span>
+    <span class="token-kw">return</span> load_heavy_dataframe(ticker)
+
+<span class="token-comment"># 2. @pv.cache_resource: For non-serializable objects (ML models, DB connection pools)</span>
+<span class="token-dec">@pv.cache_resource</span>
+<span class="token-kw">def</span> <span class="token-fn">get_db_pool</span>():
+    <span class="token-kw">return</span> create_engine(<span class="token-str">"postgresql://..."</span>)</code></pre>
+        </div>
+
+        <h3 id="flow-control" class="subsection-heading">5. Flow Control: rerun() & stop()</h3>
+        <p>
+          Control script branching cleanly with <code>pv.rerun()</code> (immediately re-triggers top-to-bottom run) and <code>pv.stop()</code> (terminates script execution cleanly at that line without error).
+        </p>
+      </section>
+
+      <!-- ====================================================================
+           API Reference
+           ==================================================================== -->
+      <section id="api-reference" class="doc-section">
+        <div class="section-tag">API Reference</div>
+        <h2 class="section-heading">Complete Component Reference</h2>
+        <p class="section-lead">Explore all 80+ components, widgets, containers, and utilities available in PyView.</p>
+
+        <!-- Category Filter Chips -->
+        <div class="api-filter-bar">
+          <button class="api-filter-chip active" data-category="all">All Components</button>
+          <button class="api-filter-chip" data-category="layout">Layout & Containers</button>
+          <button class="api-filter-chip" data-category="inputs">Inputs & Forms</button>
+          <button class="api-filter-chip" data-category="data">Tabular Data & Grid</button>
+          <button class="api-filter-chip" data-category="media">Media & Assets</button>
+          <button class="api-filter-chip" data-category="status">Status & Feedback</button>
+          <button class="api-filter-chip" data-category="core">Core & Flow</button>
+        </div>
+
+        <!-- API Card: columns -->
+        <div id="api-columns" class="api-card" data-category="layout">
+          <div class="api-card-header">
+            <div class="api-card-signature">
+              <span class="fn-module">pv.</span><span class="fn-name">columns</span>(spec: int | list[int | float]) -> list[ColumnContainer]
+            </div>
+            <span class="api-category-badge">Layout</span>
+          </div>
+          <div class="api-card-body">
+            <p class="api-card-desc">Creates a responsive multi-column layout. Use with Python's <code>with</code> block to place widgets in specific columns.</p>
+            <div class="param-table-wrapper">
+              <table class="param-table">
+                <thead>
+                  <tr>
+                    <th>Parameter</th>
+                    <th>Type</th>
+                    <th>Default</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="param-name">spec</td>
+                    <td class="param-type">int | list</td>
+                    <td class="param-default">required</td>
+                    <td class="param-desc">Integer count of equal columns (e.g. <code>3</code>) or proportional width weights (e.g. <code>[2, 1]</code>).</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="code-container">
+              <div class="code-header">
+                <span class="code-filename">columns_usage.py</span>
+                <button class="copy-btn"><span>Copy</span></button>
+              </div>
+              <pre class="code-block"><code>col1, col2 = pv.<span class="token-fn">columns</span>([<span class="token-num">3</span>, <span class="token-num">1</span>])
+<span class="token-kw">with</span> col1:
+    pv.<span class="token-fn">header</span>(<span class="token-str">"Primary View"</span>)
+<span class="token-kw">with</span> col2:
+    pv.<span class="token-fn">metric</span>(<span class="token-str">"Score"</span>, <span class="token-num">98</span>)</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- API Card: tabs -->
+        <div id="api-tabs" class="api-card" data-category="layout">
+          <div class="api-card-header">
+            <div class="api-card-signature">
+              <span class="fn-module">pv.</span><span class="fn-name">tabs</span>(tab_labels: list[str]) -> list[TabContainer]
+            </div>
+            <span class="api-category-badge">Layout</span>
+          </div>
+          <div class="api-card-body">
+            <p class="api-card-desc">Generates instant client-side tabbed switchers. All tab panes are computed server-side, allowing lag-free tab switches without WebSocket round-trips.</p>
+            <div class="code-container">
+              <div class="code-header">
+                <span class="code-filename">tabs_usage.py</span>
+                <button class="copy-btn"><span>Copy</span></button>
+              </div>
+              <pre class="code-block"><code>tab_data, tab_charts, tab_settings = pv.<span class="token-fn">tabs</span>([<span class="token-str">"📊 Data"</span>, <span class="token-str">"📈 Analytics"</span>, <span class="token-str">"⚙️ Settings"</span>])
+<span class="token-kw">with</span> tab_data:
+    pv.<span class="token-fn">dataframe</span>(my_df)
+<span class="token-kw">with</span> tab_settings:
+    pv.<span class="token-fn">checkbox</span>(<span class="token-str">"Enable Dark Mode"</span>)</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- API Card: data_editor -->
+        <div id="api-data-editor" class="api-card" data-category="data">
+          <div class="api-card-header">
+            <div class="api-card-signature">
+              <span class="fn-module">pv.</span><span class="fn-name">data_editor</span>(data, num_rows="fixed" | "dynamic", column_config=None, key=None)
+            </div>
+            <span class="api-category-badge">Data Grid</span>
+          </div>
+          <div class="api-card-body">
+            <p class="api-card-desc">A fully reactive, interactive editable data grid. Supports inline cell editing, checkbox toggles, dropdown select boxes, and adding or deleting rows dynamically.</p>
+            <div class="param-table-wrapper">
+              <table class="param-table">
+                <thead>
+                  <tr>
+                    <th>Parameter</th>
+                    <th>Type</th>
+                    <th>Default</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="param-name">data</td>
+                    <td class="param-type">DataFrame | list[dict]</td>
+                    <td class="param-default">required</td>
+                    <td class="param-desc">Tabular data to populate the grid.</td>
+                  </tr>
+                  <tr>
+                    <td class="param-name">num_rows</td>
+                    <td class="param-type">str</td>
+                    <td class="param-default">"fixed"</td>
+                    <td class="param-desc">Pass <code>"dynamic"</code> to allow users to add and remove rows directly in the UI.</td>
+                  </tr>
+                  <tr>
+                    <td class="param-name">column_config</td>
+                    <td class="param-type">dict</td>
+                    <td class="param-default">None</td>
+                    <td class="param-desc">Formatters like <code>ProgressColumn</code>, <code>CheckboxColumn</code>, <code>NumberColumn</code>.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- API Card: dataframe -->
+        <div id="api-dataframe" class="api-card" data-category="data">
+          <div class="api-card-header">
+            <div class="api-card-signature">
+              <span class="fn-module">pv.</span><span class="fn-name">dataframe</span>(data, use_container_width=True, hide_index=False)
+            </div>
+            <span class="api-category-badge">Data Grid</span>
+          </div>
+          <div class="api-card-body">
+            <p class="api-card-desc">Interactive data table with instant text search, column sorting, pagination controls, and one-click CSV export.</p>
+          </div>
+        </div>
+
+        <!-- API Card: button & inputs -->
+        <div id="api-buttons" class="api-card" data-category="inputs">
+          <div class="api-card-header">
+            <div class="api-card-signature">
+              <span class="fn-module">pv.</span><span class="fn-name">button</span>(label: str, key: str = None, type: str = "primary" | "secondary") -> bool
+            </div>
+            <span class="api-category-badge">Inputs</span>
+          </div>
+          <div class="api-card-body">
+            <p class="api-card-desc">Displays a clickable button. Evaluates strictly to <code>True</code> during the specific rerun triggered by its click, automatically resetting to <code>False</code> on the subsequent rerun.</p>
+          </div>
+        </div>
+
+        <!-- API Card: slider -->
+        <div id="api-numeric" class="api-card" data-category="inputs">
+          <div class="api-card-header">
+            <div class="api-card-signature">
+              <span class="fn-module">pv.</span><span class="fn-name">slider</span>(label: str, min_value=0, max_value=100, value=None, step=1, key=None)
+            </div>
+            <span class="api-category-badge">Inputs</span>
+          </div>
+          <div class="api-card-body">
+            <p class="api-card-desc">Numeric range slider with customizable step sizing, min/max bounds, and instant reactive updates.</p>
+          </div>
+        </div>
+
+        <!-- API Card: metric -->
+        <div id="api-metrics" class="api-card" data-category="status">
+          <div class="api-card-header">
+            <div class="api-card-signature">
+              <span class="fn-module">pv.</span><span class="fn-name">metric</span>(label: str, value: Any, delta: str = None, delta_color: str = "normal" | "inverse" | "off")
+            </div>
+            <span class="api-category-badge">Status</span>
+          </div>
+          <div class="api-card-body">
+            <p class="api-card-desc">Executive KPI card for highlighting key metrics with delta indicators (percentage or difference) and custom color modes.</p>
+          </div>
+        </div>
+
+        <!-- API Card: file_uploader -->
+        <div id="api-media-inputs" class="api-card" data-category="inputs">
+          <div class="api-card-header">
+            <div class="api-card-signature">
+              <span class="fn-module">pv.</span><span class="fn-name">file_uploader</span>(label: str, type: list[str] = None, accept_multiple_files=False, key=None)
+            </div>
+            <span class="api-category-badge">Inputs</span>
+          </div>
+          <div class="api-card-body">
+            <p class="api-card-desc">Drag-and-drop file uploader that provides in-memory access to uploaded files with <code>read()</code>, <code>name</code>, and <code>size</code> properties.</p>
+          </div>
+        </div>
+
+        <!-- API Card: toast & celebrations -->
+        <div id="api-celebrations" class="api-card" data-category="status">
+          <div class="api-card-header">
+            <div class="api-card-signature">
+              <span class="fn-module">pv.</span><span class="fn-name">balloons</span>() & <span class="fn-module">pv.</span><span class="fn-name">toast</span>(message: str, icon: str = "ℹ️")
+            </div>
+            <span class="api-category-badge">Celebrations</span>
+          </div>
+          <div class="api-card-body">
+            <p class="api-card-desc">Engage users with celebratory animations like full-screen floating balloons or snowfall, and temporary non-intrusive toast notifications.</p>
+          </div>
+        </div>
+
+        <!-- API Card: cache_data & cache_resource -->
+        <div id="api-caching" class="api-card" data-category="core">
+          <div class="api-card-header">
+            <div class="api-card-signature">
+              <span class="fn-module">@pv.</span><span class="fn-name">cache_data</span>(ttl: float = None, max_entries: int = None)
+            </div>
+            <span class="api-category-badge">Core</span>
+          </div>
+          <div class="api-card-body">
+            <p class="api-card-desc">Function decorator for memoizing computations. Has built-in cache clearing via <code>func.clear()</code>.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====================================================================
+           Examples Gallery
+           ==================================================================== -->
+      <section id="examples-gallery" class="doc-section">
+        <div class="section-tag">Recipes & Showcase</div>
+        <h2 class="section-heading">12 Ready-to-Run Example Apps</h2>
+        <p class="section-lead">The PyView repository ships with a comprehensive set of real-world apps ready to execute immediately.</p>
+
+        <div class="examples-gallery-grid">
+          <!-- Card 1 -->
+          <div class="example-card">
+            <div>
+              <div class="example-header">
+                <span class="example-icon">📊</span>
+                <h4 class="example-title">Data Elements Showcase</h4>
+              </div>
+              <p class="example-desc">Interactive dataframes with sort/search, live dynamic order batch data editor, shipping tables, and collapsible JSON telemetry.</p>
+            </div>
+            <div class="example-command">
+              <code>uv run pyview run examples/data_showcase.py</code>
+              <button class="copy-btn" data-target="#cmd-ex-1">Copy</button>
+            </div>
+            <span id="cmd-ex-1" style="display: none;">uv run pyview run examples/data_showcase.py --port 8501</span>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="example-card">
+            <div>
+              <div class="example-header">
+                <span class="example-icon">📐</span>
+                <h4 class="example-title">Layout & Containers Hub</h4>
+              </div>
+              <p class="example-desc">Multi-column grids, collapsible sidebars, multi-tab workload forecasting, and diagnostics expanders.</p>
+            </div>
+            <div class="example-command">
+              <code>uv run pyview run examples/layout_showcase.py</code>
+              <button class="copy-btn" data-target="#cmd-ex-2">Copy</button>
+            </div>
+            <span id="cmd-ex-2" style="display: none;">uv run pyview run examples/layout_showcase.py --port 8501</span>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="example-card">
+            <div>
+              <div class="example-header">
+                <span class="example-icon">⚡</span>
+                <h4 class="example-title">Executive Dashboard</h4>
+              </div>
+              <p class="example-desc">KPI metrics with positive & inverse deltas, sliders, selectboxes, checkboxes, and status alerts.</p>
+            </div>
+            <div class="example-command">
+              <code>uv run pyview run examples/dashboard.py</code>
+              <button class="copy-btn" data-target="#cmd-ex-3">Copy</button>
+            </div>
+            <span id="cmd-ex-3" style="display: none;">uv run pyview run examples/dashboard.py --port 8501</span>
+          </div>
+
+          <!-- Card 4 -->
+          <div class="example-card">
+            <div>
+              <div class="example-header">
+                <span class="example-icon">✅</span>
+                <h4 class="example-title">Daily Todo Planner</h4>
+              </div>
+              <p class="example-desc">Persistent task planner with priority badges, status toggles, inline creation card, and productivity stats.</p>
+            </div>
+            <div class="example-command">
+              <code>uv run pyview run examples/todo_app.py</code>
+              <button class="copy-btn" data-target="#cmd-ex-4">Copy</button>
+            </div>
+            <span id="cmd-ex-4" style="display: none;">uv run pyview run examples/todo_app.py --port 8501</span>
+          </div>
+
+          <!-- Card 5 -->
+          <div class="example-card">
+            <div>
+              <div class="example-header">
+                <span class="example-icon">🚀</span>
+                <h4 class="example-title">Flow & Performance Hub</h4>
+              </div>
+              <p class="example-desc">Demonstrates @pv.cache_data, @pv.cache_resource, query parameters deep-linking, and execution branching.</p>
+            </div>
+            <div class="example-command">
+              <code>uv run pyview run examples/flow_showcase.py</code>
+              <button class="copy-btn" data-target="#cmd-ex-5">Copy</button>
+            </div>
+            <span id="cmd-ex-5" style="display: none;">uv run pyview run examples/flow_showcase.py --port 8501</span>
+          </div>
+
+          <!-- Card 6 -->
+          <div class="example-card">
+            <div>
+              <div class="example-header">
+                <span class="example-icon">📝</span>
+                <h4 class="example-title">Form Validation Portal</h4>
+              </div>
+              <p class="example-desc">Community registration with 2-column cards, regex email validation, error alerts, and dynamic member roster.</p>
+            </div>
+            <div class="example-command">
+              <code>uv run pyview run examples/form_validation.py</code>
+              <button class="copy-btn" data-target="#cmd-ex-6">Copy</button>
+            </div>
+            <span id="cmd-ex-6" style="display: none;">uv run pyview run examples/form_validation.py --port 8501</span>
+          </div>
+
+          <!-- Card 7 -->
+          <div class="example-card">
+            <div>
+              <div class="example-header">
+                <span class="example-icon">🧪</span>
+                <h4 class="example-title">Scientific Unit Converter</h4>
+              </div>
+              <p class="example-desc">Temperature, distance, and weight unit converter with live conversion formulas and precision slider.</p>
+            </div>
+            <div class="example-command">
+              <code>uv run pyview run examples/converter.py</code>
+              <button class="copy-btn" data-target="#cmd-ex-7">Copy</button>
+            </div>
+            <span id="cmd-ex-7" style="display: none;">uv run pyview run examples/converter.py --port 8501</span>
+          </div>
+
+          <!-- Card 8 -->
+          <div class="example-card">
+            <div>
+              <div class="example-header">
+                <span class="example-icon">💡</span>
+                <h4 class="example-title">Python Trivia Quiz</h4>
+              </div>
+              <p class="example-desc">Interactive quiz game with 2x2 answer grid, instant feedback celebrations, score tracker, and deep-dive explanations.</p>
+            </div>
+            <div class="example-command">
+              <code>uv run pyview run examples/quiz_app.py</code>
+              <button class="copy-btn" data-target="#cmd-ex-8">Copy</button>
+            </div>
+            <span id="cmd-ex-8" style="display: none;">uv run pyview run examples/quiz_app.py --port 8501</span>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ====================================================================
+         Right Sidebar Rail: Table of Contents & Quick Actions
+         ==================================================================== -->
+    <aside id="docs-toc" class="docs-toc">
+      <div class="toc-heading">On This Page</div>
+      <ul class="toc-menu">
+        <li class="toc-item"><a href="#hero" class="toc-link active">Introduction</a></li>
+        <li class="toc-item"><a href="#quickstart" class="toc-link">Quick Start</a></li>
+        <li class="toc-item"><a href="#cli" class="toc-link">CLI Commands</a></li>
+        <li class="toc-item"><a href="#rerun-model" class="toc-link">Rerun Lifecycle</a></li>
+        <li class="toc-item"><a href="#state-session" class="toc-link">Session State</a></li>
+        <li class="toc-item"><a href="#container-scoping" class="toc-link">Container Scoping</a></li>
+        <li class="toc-item"><a href="#caching" class="toc-link">Caching Engine</a></li>
+        <li class="toc-item"><a href="#flow-control" class="toc-link">Flow Control</a></li>
+        <li class="toc-item"><a href="#api-reference" class="toc-link">API Reference</a></li>
+        <li class="toc-item"><a href="#api-columns" class="toc-link">Layout: Columns</a></li>
+        <li class="toc-item"><a href="#api-tabs" class="toc-link">Layout: Tabs</a></li>
+        <li class="toc-item"><a href="#api-data-editor" class="toc-link">Data: Data Editor</a></li>
+        <li class="toc-item"><a href="#api-dataframe" class="toc-link">Data: DataFrame</a></li>
+        <li class="toc-item"><a href="#api-buttons" class="toc-link">Inputs: Buttons</a></li>
+        <li class="toc-item"><a href="#api-numeric" class="toc-link">Inputs: Numeric</a></li>
+        <li class="toc-item"><a href="#api-metrics" class="toc-link">Status: Metrics</a></li>
+        <li class="toc-item"><a href="#api-celebrations" class="toc-link">Status: Celebrations</a></li>
+        <li class="toc-item"><a href="#examples-gallery" class="toc-link">12 Ready-to-Run Apps</a></li>
+      </ul>
+
+      <div class="toc-box">
+        <div class="toc-box-title">Quick Run</div>
+        <code class="toc-cmd">uv run pyview run examples/dashboard.py</code>
+        <button class="toc-btn-action copy-btn" data-target="#toc-cmd-val">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+          </svg>
+          <span>Copy Command</span>
+        </button>
+        <span id="toc-cmd-val" style="display: none;">uv run pyview run examples/dashboard.py --port 8501</span>
+      </div>
+
+      <div class="toc-box">
+        <div class="toc-box-title">Living Showcase</div>
+        <p style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 0.75rem;">
+          Interactive living documentation app built with native PyView components.
+        </p>
+        <code class="toc-cmd">uv run pyview run examples/documentation_showcase.py</code>
+      </div>
+
+      <div class="toc-box">
+        <div class="toc-box-title">Runtime Engine</div>
+        <div class="toc-status-row">
+          <span class="toc-status-indicator"></span>
+          <span>WebSocket + Async Worker</span>
+        </div>
+      </div>
+
+      <div style="margin-top: 1.5rem; text-align: left;">
+        <a href="#hero" style="font-size: 0.78rem; color: var(--text-muted); display: inline-flex; align-items: center; gap: 0.35rem;">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+          </svg>
+          <span>Back to top</span>
+        </a>
+      </div>
+    </aside>
+  </div>
+
+  <!-- ========================================================================
+       Footer
+       ======================================================================== -->
+  <footer class="docs-footer">
+    <div class="footer-content">
+      <div class="footer-text">
+        <span>PyView — Lightweight Reactive Web Framework. Pure Python with Zero Streamlit Dependencies.</span>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/Shabari-K-S/pyview" target="_blank" rel="noopener noreferrer" class="footer-link">GitHub</a>
+        <a href="#quickstart" class="footer-link">Documentation</a>
+        <a href="#api-reference" class="footer-link">API Reference</a>
+        <a href="https://github.com/Shabari-K-S/pyview/blob/main/README.md" target="_blank" rel="noopener noreferrer" class="footer-link">README</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

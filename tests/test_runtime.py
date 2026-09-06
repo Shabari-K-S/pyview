@@ -318,6 +318,7 @@ def test_cli_version_and_help(capsys):
         "status_showcase.py",
         "media_showcase.py",
         "flow_showcase.py",
+        "documentation_showcase.py",
     ],
 )
 async def test_all_examples_execute_cleanly(example_name: str):

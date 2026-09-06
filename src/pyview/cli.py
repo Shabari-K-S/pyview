@@ -56,6 +56,26 @@ def main() -> None:
         help="Logging level (default: info)",
     )
 
+    # `pyview docs`
+    docs_parser = subparsers.add_parser("docs", help="Open local PyView documentation portal")
+    docs_parser.add_argument(
+        "--host",
+        type=str,
+        default="127.0.0.1",
+        help="Host interface to bind to (default: 127.0.0.1)",
+    )
+    docs_parser.add_argument(
+        "--port",
+        type=int,
+        default=8000,
+        help="Port to serve documentation on (default: 8000)",
+    )
+    docs_parser.add_argument(
+        "--no-browser",
+        action="store_true",
+        help="Do not open the web browser automatically",
+    )
+
     args = parser.parse_args()
 
     if args.command == "run":
@@ -77,6 +97,45 @@ def main() -> None:
             port=args.port,
             log_level=args.log_level,
         )
+    elif args.command == "docs":
+        import http.server
+        import functools
+        import threading
+        import webbrowser
+
+        # Search for docs directory: repo root, cwd, or package
+        possible_dirs = [
+            Path(__file__).resolve().parent.parent.parent / "docs",
+            Path.cwd() / "docs",
+        ]
+        docs_dir = None
+        for d in possible_dirs:
+            if d.exists() and (d / "index.html").exists():
+                docs_dir = d
+                break
+
+        if not docs_dir:
+            print("Error: Could not locate PyView documentation directory.", file=sys.stderr)
+            sys.exit(1)
+
+        url = f"http://{args.host}:{args.port}"
+        print("=" * 60)
+        print(f"  🚀 PyView Documentation v{pyview.__version__}")
+        print(f"  📚 Path: {docs_dir}")
+        print(f"  🌐 URL:  {url}")
+        print("=" * 60)
+
+        handler = functools.partial(http.server.SimpleHTTPRequestHandler, directory=str(docs_dir))
+        server = http.server.ThreadingHTTPServer((args.host, args.port), handler)
+
+        if not args.no_browser:
+            threading.Timer(0.5, lambda: webbrowser.open(url)).start()
+
+        try:
+            server.serve_forever()
+        except KeyboardInterrupt:
+            print("\nShutting down documentation server...")
+            server.server_close()
     else:
         parser.print_help()
         sys.exit(0)
